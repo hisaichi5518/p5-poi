@@ -1,0 +1,6 @@
+#!perl
+use strict;
+use warnings;
+
+use App::Poi;
+App::Poi->run;
