@@ -23,7 +23,7 @@ sub execute {
 
     my $files  = $self->build($template_dir);
     $self->generate_flavor(
-        name  => $flavor_name,
+        name  => $flavor_path,
         path  => $flavor_path,
         files => $files,
     );
