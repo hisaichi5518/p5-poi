@@ -42,7 +42,9 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "App::Cmd" : "0",
+            "Path::Tiny" : "0",
+            "perl" : "5.010001"
          }
       },
       "test" : {
@@ -52,5 +54,19 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/hisaichi5518/p5-poi/issues"
+      },
+      "homepage" : "https://github.com/hisaichi5518/p5-poi",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/hisaichi5518/p5-poi.git",
+         "web" : "https://github.com/hisaichi5518/p5-poi"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "hisaichi5518 <hisaichi5518@gmail.com>"
+   ]
 }
