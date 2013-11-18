@@ -20,8 +20,7 @@ sub description {
 sub execute {
     my ($self, $opts, $args) = @_;
 
-    my $base_dir     = $args->[0] or die "YOU SHOULD RUN `poi pack .`";
-    my $template_dir = path($base_dir)->absolute;
+    my $template_dir = Path::Tiny->cwd->absolute;
 
     my $renderer = App::Poi::FlavorRenderer->new;
     my $itr      = $template_dir->iterator({recurse => 1});
@@ -53,11 +52,11 @@ __END__
 
 =head1 USAGE
 
-  $ poi pack <template dir>
+  $ poi pack
 
 =head1 DESCRIPTION
 
-  <template dir>以下にあるファイルを全てFlavorファイルにまとめます。
+  実行したディレクトリ以下にあるファイルを全てFlavorファイルにまとめます。
   NOTE: ただし、PATHに.git/を含むファイルは省く。
 
   詳しくは、perldoc -m App::Poi::Command::pack
