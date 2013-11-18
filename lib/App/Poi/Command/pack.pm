@@ -31,7 +31,7 @@ sub execute {
         next if $path =~ m{\.git/};
 
         $result{$renderer->render_path($path->relative)}
-            = $rendeerer->render_body($path->slurp_utf8);
+            = $renderer->render_body($path->slurp_utf8);
 
     }
 
