@@ -38,7 +38,7 @@ sub generate_flavor {
 
     for my $file (keys %$files) {
         $result .= qq!'$file' => <<'...',\n!;
-        $result .= $files->{$file} . "\n";
+        $result .= $files->{$file};
         $result .= qq!...\n!;
     }
 
