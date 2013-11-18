@@ -6,43 +6,31 @@ use utf8;
 use App::Poi -command;
 use Text::Xslate;
 use Path::Tiny;
+use App::Poi::Util;
 
-# ABSTRACT: create skeleton by flavor.
+# ABSTRACT: YOU SHOULD RUN 'poi help new'.
 
-sub opt_spec {
-    return (
-        ["flavor|f=s", "set flavor(require)"],
-    );
+sub description {
+    my ($self) = @_;
+    my $class  = ref $self;
+    `perldoc -T $class`;
 }
+
+sub opt_spec { (["flavor|f=s", "set flavor(require)"]) }
 
 sub validate_args {
     my ($self, $opts, $args) = @_;
 
-    $self->usage_error("poi new --flavor=FlavorName Hoge") if !@$args;
-}
-
-sub load_class { # copied Plack::Util#load_class
-    my($self, $class, $prefix) = @_;
-
-    if ($prefix) {
-        unless ($class =~ s/^\+// || $class =~ /^$prefix/) {
-            $class = "$prefix\::$class";
-        }
-    }
-
-    my $file = $class;
-    $file =~ s!::!/!g;
-    require "$file.pm"; ## no critic
-
-    return $class;
+    $self->usage_error("need flavor")  if !$opts->{flavor};
+    $self->usage_error("need AppName") if !@$args;
 }
 
 sub execute {
     my ($self, $opts, $args) = @_;
 
-    my $module_name = $args->[0]    or die "poi new -f <flavor> <distname>";
-    my $flavor_name = $opts->flavor or die "require flavor";
-    my $klass       = $self->load_class($flavor_name, "App::Poi::Flavor");
+    my $module_name = $args->[0];
+    my $flavor_name = $opts->{flavor};
+    my $klass       = App::Poi::Util::load_class($flavor_name, "App::Poi::Flavor");
 
     my $files = $klass->files;
     my $view  = Text::Xslate->new(
@@ -53,9 +41,8 @@ sub execute {
     );
 
     # setup
-    my @module_names = split "::", $module_name;
-    my $path_name = join "/", @module_names;
-
+    my @module_names = split "::", $module_name; # Fuga::Bar
+    my $path_name    = join "/", @module_names;  # Fuga/Bar
     my $dist = {
         name => {
             with_hyphen => {
@@ -68,6 +55,7 @@ sub execute {
             },
         },
     };
+
     my $base_dir = path($dist->{name}{with_hyphen}{downcase});
     die "exists $base_dir." if -d $base_dir;
     $base_dir->mkpath;
@@ -95,3 +83,21 @@ sub execute {
 }
 
 1;
+__END__
+
+=encoding utf-8
+
+=head1 USAGE
+
+  $ poi new --flavor=<FlavorName> <AppName>
+  or
+  $ poi new -f <FlavorName> <AppName>
+
+=head1 DESCRIPTION
+
+
+=head1 SEE ALSO
+
+L<App::Poi::Command::pack>
+
+=cut
