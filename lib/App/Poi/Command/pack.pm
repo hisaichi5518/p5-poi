@@ -62,8 +62,4 @@ __END__
 
   詳しくは、perldoc -m App::Poi::Command::pack
 
-=head1 SEE ALSO
-
-L<App::Poi::Command::pack>
-
 =cut
