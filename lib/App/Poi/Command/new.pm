@@ -45,7 +45,12 @@ sub execute {
     my $klass       = $self->load_class($flavor_name, "App::Poi::Flavor");
 
     my $files = $klass->files;
-    my $view  = Text::Xslate->new(module => ["Text::Xslate::Bridge::Star"]);
+    my $view  = Text::Xslate->new(
+        module     => ["Text::Xslate::Bridge::Star"],
+        tag_start  => "<%",
+        tag_end    => "%>",
+        line_start => "%%",
+    );
 
     # setup
     my @module_names = split "::", $module_name;
@@ -72,6 +77,7 @@ sub execute {
         module => {name => $module_name},
         dist   => $dist,
     };
+
     for my $f (keys %$files) {
         my $path = $view->render_string($f, $vars);
         my $body = $view->render_string($files->{$f}, $vars);
