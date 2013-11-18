@@ -95,6 +95,7 @@ __END__
 
 =head1 DESCRIPTION
 
+新しいアプリを作るときに使うよ。Flavorとアプリ名が必須だよ。
 
 =head1 SEE ALSO
 

@@ -37,3 +37,10 @@ sub _render {
 }
 
 1;
+__END__
+
+=head1 SEE ALSO
+
+L<App::Poi::Command::pack>
+
+=cut

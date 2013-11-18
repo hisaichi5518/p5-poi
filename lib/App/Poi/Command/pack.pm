@@ -56,9 +56,37 @@ __END__
 
 =head1 DESCRIPTION
 
-  実行したディレクトリ以下にあるファイルを全てFlavorファイルにまとめます。
-  NOTE: ただし、PATHに.git/を含むファイルは省く。
+実行したディレクトリ以下にあるファイルを全てFlavorファイルにまとめます。
 
-  詳しくは、perldoc -m App::Poi::Command::pack
+NOTE: ただし、PATHに.git/を含むファイルは省く。
+
+詳しくは、perldoc -m App::Poi::Command::pack
+
+=head1 変換文字
+
+=head2 MyApp
+
+  ファイルのパス(path): <% $path.name %>   # Foo/Bar
+  ファイルの中身(body): <% $module.name %> # Foo::Bar
+
+=head2 my-app
+
+  ファイルのパス(path): <% $dist.name.with_hyphen.downcase %> # foo-bar
+  ファイルの中身(body): <% $dist.name.with_hyphen.downcase %> # foo-bar
+
+=head2 MY-APP
+
+  ファイルのパス(path): <% $dist.name.with_hyphen.upcase %> # FOO-BAR
+  ファイルの中身(body): <% $dist.name.with_hyphen.upcase %> # FOO-BAR
+
+=head2 my_app
+
+  ファイルのパス(path): <% $dist.name.with_undersocre.downcase %> # foo_bar
+  ファイルの中身(body): <% $dist.name.with_undersocre.downcase %> # foo_bar
+
+=head2 MY_APP
+
+  ファイルのパス(path): <% $dist.name.with_undersocre.upcase %> # FOO_BAR
+  ファイルの中身(body): <% $dist.name.with_undersocre.upcase %> # FOO_BAR
 
 =cut
