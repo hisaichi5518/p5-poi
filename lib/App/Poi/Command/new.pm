@@ -16,7 +16,12 @@ sub description {
     `perldoc -T $class`;
 }
 
-sub opt_spec { (["flavor|f=s", "set flavor(require)"]) }
+sub opt_spec {
+    (
+        ["flavor|f=s", "set flavor(require)"],
+        ["inc|I=s", "test"]
+    )
+}
 
 sub validate_args {
     my ($self, $opts, $args) = @_;
@@ -27,11 +32,12 @@ sub validate_args {
 
 sub execute {
     my ($self, $opts, $args) = @_;
-
     my $module_name = $args->[0];
     my $flavor_name = $opts->{flavor};
-    my $klass       = App::Poi::Util::load_class($flavor_name, "App::Poi::Flavor");
 
+    push @INC, $opts->{inc} if $opts->{inc};
+
+    my $klass = App::Poi::Util::load_class($flavor_name, "App::Poi::Flavor");
     $klass->new(module => $module_name)->run();
 }
 
@@ -43,8 +49,7 @@ __END__
 =head1 USAGE
 
   $ poi new --flavor=<FlavorName> <AppName>
-  or
-  $ poi new -f <FlavorName> <AppName>
+  $ poi new -Ilib -f <FlavorName> <AppName>
 
 =head1 DESCRIPTION
 
