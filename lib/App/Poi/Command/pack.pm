@@ -17,10 +17,21 @@ sub description {
     `perldoc -T $class`;
 }
 
+sub opt_spec { (["ignore=s@", "Ignore files/directories matching this pattern."]) }
+
+sub match {
+    my ($path, $patterns) = @_;
+
+    for my $pattern (@$patterns) {
+        return 1 if $path =~ $pattern;
+    }
+}
+
 sub execute {
     my ($self, $opts, $args) = @_;
 
-    my $template_dir = Path::Tiny->cwd->absolute;
+    my $ignore_patterns = [map { qr/$_/ } @{$opts->{'ignore'}}];
+    my $template_dir    = Path::Tiny->cwd->absolute;
 
     my $renderer = App::Poi::FlavorRenderer->new;
     my $itr      = $template_dir->iterator({recurse => 1});
@@ -28,6 +39,11 @@ sub execute {
     while (my ($path) = $itr->()) {
         next if $path->is_dir;
         next if $path =~ m{\.git/};
+
+        if (match $path, $ignore_patterns) {
+            warn "SKIP: $path";
+            next;
+        }
 
         $result{$renderer->render_path($path->relative)}
             = $renderer->render_body($path->slurp_utf8);
