@@ -19,8 +19,9 @@ sub pack {
 
     my $flavor = encode_utf8 <<"...";
 package $flavor_name;
-use strict;
-use warnings;
+use Mouse;
+with "App::Poi::Role::Flavor";
+no Mouse;
 
 sub files {
     {

@@ -32,54 +32,7 @@ sub execute {
     my $flavor_name = $opts->{flavor};
     my $klass       = App::Poi::Util::load_class($flavor_name, "App::Poi::Flavor");
 
-    my $files = $klass->files;
-    my $view  = Text::Xslate->new(
-        module     => ["Text::Xslate::Bridge::Star"],
-        tag_start  => "<%",
-        tag_end    => "%>",
-        line_start => "%%",
-    );
-
-    # setup
-    my @module_names = split "::", $module_name; # Fuga::Bar
-    my $path_name    = join "/", @module_names;  # Fuga/Bar
-    my $dist = {
-        name => {
-            with_hyphen => {
-                upcase   => scalar(join "-", map { uc $_ } @module_names),
-                downcase => scalar(join "-", map { lc $_ } @module_names),
-            },
-            with_underscore => {
-                upcase   => scalar(join "_", map { uc $_ } @module_names),
-                downcase => scalar(join "_", map { lc $_ } @module_names),
-            },
-        },
-    };
-
-    my $base_dir = path($dist->{name}{with_hyphen}{downcase});
-    die "exists $base_dir." if -d $base_dir;
-    $base_dir->mkpath;
-
-    my $vars = {
-        path   => {name => $path_name},
-        module => {name => $module_name},
-        dist   => $dist,
-    };
-
-    for my $f (keys %$files) {
-        my $path = $view->render_string($f, $vars);
-        my $body = $view->render_string($files->{$f}, $vars);
-
-        my $file = path($base_dir, $path);
-        my $parent = $file->parent;
-        $parent->mkpath if !-d $parent;
-
-        say "generate $file";
-        # save file
-        my $fh = $file->openw;
-        $fh->print($body);
-        $fh->close;
-    }
+    $klass->new(module => $module_name)->run();
 }
 
 1;
