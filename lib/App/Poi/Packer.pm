@@ -12,8 +12,13 @@ sub pack {
     my $result      = "";
 
     for my $file (keys %$files) {
+        my $body = $files->{$file};
+        if (!($body =~ m/\n$/)) {
+            $body .= "\n";
+        }
+
         $result .= qq!'$file' => <<'__APP_POI_PACKER__',\n!;
-        $result .= $files->{$file};
+        $result .= $body;
         $result .= qq!__APP_POI_PACKER__\n!;
     }
 
