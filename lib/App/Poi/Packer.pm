@@ -11,7 +11,7 @@ sub pack {
     my $files       = $args{files};
     my $result      = "";
 
-    for my $file (keys %$files) {
+    for my $file (sort keys %$files) {
         my $body = $files->{$file};
         if (!($body =~ m/\n$/)) {
             $body .= "\n";
